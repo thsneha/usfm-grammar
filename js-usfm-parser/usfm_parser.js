@@ -25,6 +25,9 @@ const Filter={
 
 bookcode_query=new Query(USFM3,'(File(book(id(bookcode)@book-code)))');
 chapter_query=new Query(USFM3,'(File(chapter)@chapter)');
+chapternumber_query=new Query(USFM3,'(c (chapterNumber) @chapter-number)');
+versenum_query=new Query(USFM3,'(v(verseNumber) @verse)');
+versetext_query=new Query(USFM3,'(verseText)@verse-text')
 //console.log(bookcode_query);
 
 class USFMParser{
@@ -72,21 +75,42 @@ class USFMParser{
            const matches = bookcode_query.matches(this.syntaxTree);
            //console.log(matches);
            const cap=matches[0]
-           console.log(cap);
-           //console.log(cap.captures[0].node.startPosition.row);
-           //console.log(cap.captures[0].node.startPosition.column);
-           //console.log(this.usfm[cap.captures[0].node.startPosition.row])
-   
-           console.log(cap.captures[0].node.text)
+          // console.log(cap);
+        
            objoutput.book={'bookcode':cap.captures[0].node.text};
-           console.log(objoutput)
-           objoutput['book']['chapter']=[]
+           //console.log(objoutput)
+           objoutput['book']['chapters']=[]
            //console.log(objoutput)
            const matches1=chapter_query.matches(this.syntaxTree);
-           //console.log(matches1);
-           // for cap in matches1{
-           // 	 console.log(cap);
-           // 	}
+		   const cap1=matches1[0]
+		   const chapters=cap1.captures[0].node.text;
+		   for(let chapts in chapters[0]){
+			const matches2=chapternumber_query.matches(this.syntaxTree)
+			const chapterNumber=matches2[0].captures[0].node.text;
+			
+		
+			objoutput.book.chapters.push({'chapterNumber':chapterNumber,"contents":[]})
+			console.log(objoutput.book.chapters[0].contents);
+			//console.log(JSON.stringify(objoutput, null, 2));
+			
+			const versenum_captures = versenum_query.matches(this.syntaxTree)
+			console.log(versenum_captures);
+			const versetext_captures=versetext_query.matches(this.syntaxTree)
+			console.log(versetext_captures);
+			for(let each in versenum_captures){
+				
+			const verseNumber=versenum_captures[each].captures[0].node.text
+			
+			const versetext=versetext_captures[each].captures[0].node.text
+			console.log({'verseNumber':verseNumber},{'verseText':versetext});
+			objoutput.book.chapters[0].contents.push({'VerseNumber':verseNumber,'verseText':versetext})
+			}
+			console.log(JSON.stringify(objoutput, null, 2));
+			
+			
+		   }
+		
+		
 
 
 
