@@ -66,21 +66,17 @@ class USFMParser{
 
 
 	toJSON(filt=Filter.SCRIPTURE_BCV){
-		//console.log(filt);
+	
 	// 	/* Coverts syntax tree to JSON, based on filter option given */
 		if (filt ==([Filter.SCRIPTURE_BCV])){
 			//console.log(this.syntaxTree);
  
            var objoutput={};                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
            const matches = bookcode_query.matches(this.syntaxTree);
-           //console.log(matches);
            const cap=matches[0]
-          // console.log(cap);
         
            objoutput.book={'bookcode':cap.captures[0].node.text};
-           //console.log(objoutput)
            objoutput['book']['chapters']=[]
-           //console.log(objoutput)
            const matches1=chapter_query.matches(this.syntaxTree);
 		   const cap1=matches1[0]
 		   const chapters=cap1.captures[0].node.text;
